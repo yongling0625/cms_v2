@@ -37,10 +37,9 @@ public class RedisConfig extends CachingConfigurerSupport {
             sb.append(":");
             sb.append(method.getName());
             for (Object obj : params) {
-                sb.append(":" + String.valueOf(obj));
+                sb.append(":").append(obj);
             }
-            String rsToUse = String.valueOf(sb);
-            return rsToUse;
+            return sb.toString();
         };
     }
 
@@ -56,7 +55,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         return redisTemplate;
     }
 
-    public Jackson2JsonRedisSerializer jackson2JsonRedisSerializer() {
+    private Jackson2JsonRedisSerializer jackson2JsonRedisSerializer() {
         //设置序列化
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
         ObjectMapper om = new ObjectMapper();
@@ -87,11 +86,10 @@ public class RedisConfig extends CachingConfigurerSupport {
         //这种方式设置无效
         //defaultCacheConfig.entryTtl(Duration.ofSeconds(120));
         //初始化RedisCacheManager
-        RedisCacheManager cacheManager = RedisCacheManager.builder(redisCacheWriter)
+        return RedisCacheManager.builder(redisCacheWriter)
                 .cacheDefaults(defaultCacheConfig)
                 .transactionAware()
                 .build();
-        return cacheManager;
     }
 
 
