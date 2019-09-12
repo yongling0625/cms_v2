@@ -1,0 +1,20 @@
+log_home: D:\\logs
+spring:
+  devtools:
+    restart:
+      enabled: true
+
+  datasource:
+    url: jdbc:mysql://106.15.43.169:3307/cms?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: yunbandan.1
+
+  redis:
+    host: 106.15.43.169
+    port: 6380
+    password:
+    timeout: 10000ms
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
