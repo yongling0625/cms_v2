@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 机构控制器
+ *
  * @author Louis
  * @date Oct 29, 2018
  */
@@ -23,29 +25,26 @@ import java.util.List;
 @RequestMapping("dept")
 public class SysDeptController {
 
-	@Autowired
-	private SysDeptService sysDeptService;
-	
-	@RequiresPermissions({"sys:dept:add", "sys:dept:edit"})
-	@PostMapping(value="/save")
-	public HttpResult saveOrUpdate(@RequestBody SysDept record) {
-		return HttpResult.ok(sysDeptService.saveOrUpdate(record));
-	}
+    @Autowired
+    private SysDeptService sysDeptService;
 
-	@RequiresPermissions("sys:dept:delete")
-	@PostMapping(value="/delete")
-	public HttpResult delete(@RequestBody List<SysDept> records) {
-		List<Long> idList = new ArrayList<>();
-		records.forEach(record -> {
-			idList.add(record.getId());
-		});
-		return HttpResult.ok(sysDeptService.removeByIds(idList));
-	}
+    @RequiresPermissions({"sys:dept:add", "sys:dept:edit"})
+    @PostMapping(value = "/save")
+    public HttpResult saveOrUpdate(@RequestBody SysDept record) {
+        return HttpResult.ok(sysDeptService.saveOrUpdate(record));
+    }
 
-	@RequiresPermissions("sys:dept:view")
-	@GetMapping(value="/findTree")
-	public HttpResult findTree() {
-		return HttpResult.ok(sysDeptService.findTree());
-	}
+    @RequiresPermissions("sys:dept:delete")
+    @PostMapping(value = "/delete")
+    public HttpResult delete(@RequestBody List<SysDept> records) {
+        List<Long> idList = records.stream().map(SysDept::getId).collect(Collectors.toList());
+        return HttpResult.ok(sysDeptService.removeByIds(idList));
+    }
+
+    @RequiresPermissions("sys:dept:view")
+    @GetMapping(value = "/findTree")
+    public HttpResult findTree() {
+        return HttpResult.ok(sysDeptService.findTree());
+    }
 
 }

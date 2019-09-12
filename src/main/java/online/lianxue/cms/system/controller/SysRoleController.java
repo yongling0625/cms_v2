@@ -30,8 +30,6 @@ public class SysRoleController {
 
 	@Autowired
 	private SysRoleService sysRoleService;
-	@Autowired
-	private SysRoleMapper sysRoleMapper;
 	
 	@RequiresPermissions({"sys:role:add", "sys:role:edit"})
 	@PostMapping(value="/save")
@@ -77,7 +75,7 @@ public class SysRoleController {
 	@PostMapping(value="/saveRoleMenus")
 	public HttpResult saveRoleMenus(@RequestBody List<SysRoleMenu> records) {
 		for(SysRoleMenu record:records) {
-			SysRole sysRole = sysRoleMapper.selectById(record.getRoleId());
+			SysRole sysRole = sysRoleService.getById(record.getRoleId());
 			if("admin".equalsIgnoreCase(sysRole.getName())) {
 				// 如果是超级管理员，不允许修改
 				return HttpResult.error("超级管理员拥有所有菜单权限，不允许修改！");

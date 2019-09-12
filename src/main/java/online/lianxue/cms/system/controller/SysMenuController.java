@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -35,10 +36,7 @@ public class SysMenuController {
 	@RequiresPermissions("sys:menu:delete")
 	@PostMapping(value="/delete")
 	public HttpResult delete(@RequestBody List<SysMenu> records) {
-		List<Long> idList = new ArrayList<>();
-		records.forEach(record -> {
-			idList.add(record.getId());
-		});
+		List<Long> idList = records.stream().map(SysMenu::getId).collect(Collectors.toList());
 		return HttpResult.ok(sysMenuService.removeByIds(idList));
 	}
 
