@@ -22,9 +22,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * shiro权限认证
@@ -65,8 +65,7 @@ public class MyShiroRealm extends AuthorizingRealm {
      * Shiro登录认证(原理：用户提交 用户名和密码  --- shiro 封装令牌 ---- realm 通过用户名将密码查询返回 ---- shiro 自动去比较查询出密码和用户输入密码是否一致---- 进行登陆控制 )
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(
-            AuthenticationToken authcToken) {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) {
         log.info("Shiro开始登陆认证");
         String token = (String) authcToken.getCredentials();
         // 解密获得username，用于和数据库进行对比
@@ -95,28 +94,22 @@ public class MyShiroRealm extends AuthorizingRealm {
      * Shiro权限认证
      */
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(
-            PrincipalCollection principals) {
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         log.info("Shiro开始权限认证");
         Integer userId = Integer.valueOf(principals.getPrimaryPrincipal().toString());
         Set<String> permissionSet = Sets.newHashSet();
         //超级管理员
         if (userId == 1) {
             List<SysMenu> menuList = sysMenuService.list();
-            menuList.forEach(sysMenu -> {
-                if (StringUtils.isNotBlank(sysMenu.getPerms())) {
-                    permissionSet.add(sysMenu.getPerms());
-                }
-            });
+            permissionSet = menuList.stream().map(SysMenu::getPerms)
+                    .filter(StringUtils::isNotBlank).collect(Collectors.toSet());
         } else {
-            List<SysUserRole> userRoleList = sysUserRoleService.list(new QueryWrapper<SysUserRole>().select("role_id").eq("user_id", userId));
+            List<SysUserRole> userRoleList = sysUserRoleService.list(new QueryWrapper<SysUserRole>()
+                    .select("role_id").eq("user_id", userId));
             for (SysUserRole userRole : userRoleList) {
                 List<SysMenu> roleMenus = sysRoleService.findRoleMenus(userRole.getRoleId());
-                roleMenus.forEach(roleMenu -> {
-                    if (StringUtils.isNoneBlank(roleMenu.getPerms())) {
-                        permissionSet.add(roleMenu.getPerms());
-                    }
-                });
+                permissionSet = roleMenus.stream().map(SysMenu::getPerms)
+                        .filter(StringUtils::isNotBlank).collect(Collectors.toSet());
             }
         }
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
