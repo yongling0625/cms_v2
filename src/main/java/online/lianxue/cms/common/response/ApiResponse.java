@@ -2,7 +2,9 @@ package online.lianxue.cms.common.response;
 
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
+
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.OK;
 
 /**
  * HTTP结果封装
@@ -21,15 +23,15 @@ public class ApiResponse<T> {
     public static ApiResponse ok() {
         return ApiResponse.builder()
                 .success(true)
-                .code(HttpStatus.OK.value())
-                .msg(HttpStatus.OK.getReasonPhrase())
+                .code(OK.value())
+                .msg(OK.getReasonPhrase())
                 .build();
     }
 
     public static ApiResponse ok(String msg) {
         return ApiResponse.builder()
                 .success(true)
-                .code(HttpStatus.OK.value())
+                .code(OK.value())
                 .msg(msg)
                 .build();
     }
@@ -37,18 +39,18 @@ public class ApiResponse<T> {
     public static <T> ApiResponse ok(T data) {
         return ApiResponse.builder()
                 .success(true)
-                .code(HttpStatus.OK.value())
-                .msg(HttpStatus.OK.getReasonPhrase())
+                .code(OK.value())
+                .msg(OK.getReasonPhrase())
                 .data(data)
                 .build();
     }
 
     public static ApiResponse error() {
-        return error(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        return error(INTERNAL_SERVER_ERROR.value(), INTERNAL_SERVER_ERROR.getReasonPhrase());
     }
 
     public static ApiResponse error(String msg) {
-        return error(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg);
+        return error(INTERNAL_SERVER_ERROR.value(), msg);
     }
 
     public static ApiResponse error(int code, String msg) {
