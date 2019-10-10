@@ -2,7 +2,7 @@ package online.lianxue.cms.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.code.kaptcha.Producer;
-import online.lianxue.cms.common.response.HttpResult;
+import online.lianxue.cms.common.response.ApiResponse;
 import online.lianxue.cms.common.util.PasswordUtils;
 import online.lianxue.cms.system.entity.SysUser;
 import online.lianxue.cms.system.entity.SysUserToken;
@@ -59,7 +59,7 @@ public class SysLoginController {
 	 * 登录接口
 	 */
 	@PostMapping(value = "/login")
-	public HttpResult login(@RequestBody LoginBean loginBean){
+	public ApiResponse login(@RequestBody LoginBean loginBean){
 		String userName = loginBean.getAccount();
 		String password = loginBean.getPassword();
 		String captcha = loginBean.getCaptcha();
@@ -67,10 +67,10 @@ public class SysLoginController {
 		// 从session中获取之前保存的验证码跟前台传来的验证码进行匹配
 		Object kaptcha = redisTemplate.opsForValue().get("kaptcha");
 //		if(kaptcha == null){
-//			return HttpResult.error("验证码已失效");
+//			return ApiResponse.error("验证码已失效");
 //		}
 //		if(!captcha.equals(kaptcha)){
-//			return HttpResult.error("验证码不正确");
+//			return ApiResponse.error("验证码不正确");
 //		}
 		
 		// 用户信息
@@ -78,21 +78,21 @@ public class SysLoginController {
 
 		// 账号不存在、密码错误
 		if (user == null) {
-			return HttpResult.error("账号不存在");
+			return ApiResponse.error("账号不存在");
 		}
 		
 		if (!match(user, password)) {
-			return HttpResult.error("密码不正确");
+			return ApiResponse.error("密码不正确");
 		}
 
 		// 账号锁定
 		if (user.getStatus() == 0) {
-			return HttpResult.error("账号已被锁定,请联系管理员");
+			return ApiResponse.error("账号已被锁定,请联系管理员");
 		}
 
 		// 生成token，并保存到数据库
 		SysUserToken data = sysUserTokenService.createToken(user);
-		return HttpResult.ok(data);
+		return ApiResponse.ok(data);
 	}
 
 	/**
@@ -109,8 +109,8 @@ public class SysLoginController {
 	 * 登出接口
 	 */
 	@GetMapping(value = "/logout")
-	public HttpResult logout() {
+	public ApiResponse logout() {
 //		ShiroUtils.logout();
-		return HttpResult.ok();
+		return ApiResponse.ok();
 	}
 }

@@ -1,6 +1,6 @@
 package online.lianxue.cms.common.exception;
 
-import online.lianxue.cms.common.response.HttpResult;
+import online.lianxue.cms.common.response.ApiResponse;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -18,20 +18,20 @@ public class GlobalExceptionHandler {
 
     // 捕捉UnauthorizedException
     @ExceptionHandler(UnauthorizedException.class)
-    public HttpResult handle401(UnauthorizedException e) {
-        return HttpResult.error(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
+    public ApiResponse handle401(UnauthorizedException e) {
+        return ApiResponse.error(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
     }
 
     // 捕捉AuthenticationException
     @ExceptionHandler(AuthenticationException.class)
-    public HttpResult handle401(AuthenticationException e) {
-        return HttpResult.error(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
+    public ApiResponse handle401(AuthenticationException e) {
+        return ApiResponse.error(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
     }
 
     // 捕捉shiro的异常
     @ExceptionHandler(ShiroException.class)
-    public HttpResult handle401(ShiroException e) {
-        return HttpResult.error(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
+    public ApiResponse handle401(ShiroException e) {
+        return ApiResponse.error(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
     }
 
     /**
@@ -41,18 +41,18 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public HttpResult handleMethodArgumentNotValidException(
+    public ApiResponse handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e) {
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
         StringBuffer errorMsg = new StringBuffer();
         errors.forEach(x -> errorMsg.append(x.getDefaultMessage()).append(";"));
-        return HttpResult.error(HttpStatus.BAD_REQUEST.value(), errorMsg.toString());
+        return ApiResponse.error(HttpStatus.BAD_REQUEST.value(), errorMsg.toString());
     }
 
     // 捕捉其他所有异常
     @ExceptionHandler(Exception.class)
-    public HttpResult globalException(Exception e) {
+    public ApiResponse globalException(Exception e) {
         e.printStackTrace();
-        return HttpResult.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
     }
 }

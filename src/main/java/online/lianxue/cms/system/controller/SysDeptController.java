@@ -1,6 +1,6 @@
 package online.lianxue.cms.system.controller;
 
-import online.lianxue.cms.common.response.HttpResult;
+import online.lianxue.cms.common.response.ApiResponse;
 import online.lianxue.cms.system.entity.SysDept;
 import online.lianxue.cms.system.service.SysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,21 +29,21 @@ public class SysDeptController {
 
     @RequiresPermissions({"sys:dept:add", "sys:dept:edit"})
     @PostMapping(value = "/save")
-    public HttpResult saveOrUpdate(@RequestBody SysDept record) {
-        return HttpResult.ok(sysDeptService.saveOrUpdate(record));
+    public ApiResponse saveOrUpdate(@RequestBody SysDept record) {
+        return ApiResponse.ok(sysDeptService.saveOrUpdate(record));
     }
 
     @RequiresPermissions("sys:dept:delete")
     @PostMapping(value = "/delete")
-    public HttpResult delete(@RequestBody List<SysDept> records) {
+    public ApiResponse delete(@RequestBody List<SysDept> records) {
         List<Long> idList = records.stream().map(SysDept::getId).collect(Collectors.toList());
-        return HttpResult.ok(sysDeptService.removeByIds(idList));
+        return ApiResponse.ok(sysDeptService.removeByIds(idList));
     }
 
     @RequiresPermissions("sys:dept:view")
     @GetMapping(value = "/findTree")
-    public HttpResult findTree() {
-        return HttpResult.ok(sysDeptService.findTree());
+    public ApiResponse findTree() {
+        return ApiResponse.ok(sysDeptService.findTree());
     }
 
 }
