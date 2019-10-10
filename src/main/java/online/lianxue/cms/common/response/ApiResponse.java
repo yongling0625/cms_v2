@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 
 /**
  * HTTP结果封装
+ *
  * @author zhuyl
  */
 @Data
@@ -24,6 +25,7 @@ public class ApiResponse<T> {
                 .msg(HttpStatus.OK.getReasonPhrase())
                 .build();
     }
+
     public static ApiResponse ok(String msg) {
         return ApiResponse.builder()
                 .success(true)
@@ -40,6 +42,7 @@ public class ApiResponse<T> {
                 .data(data)
                 .build();
     }
+
     public static ApiResponse error() {
         return error(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
     }
@@ -56,7 +59,6 @@ public class ApiResponse<T> {
                 .build();
 
     }
-
 
 
 }
