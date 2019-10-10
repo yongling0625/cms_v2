@@ -12,21 +12,21 @@ import org.springframework.http.HttpStatus;
 @Builder
 public class ApiResponse<T> {
 
-    private boolean isSuccess;
+    private boolean success;
     private int code;
     private String msg;
     private T data;
 
     public static ApiResponse ok() {
         return ApiResponse.builder()
-                .isSuccess(true)
+                .success(true)
                 .code(HttpStatus.OK.value())
                 .msg(HttpStatus.OK.getReasonPhrase())
                 .build();
     }
     public static ApiResponse ok(String msg) {
         return ApiResponse.builder()
-                .isSuccess(true)
+                .success(true)
                 .code(HttpStatus.OK.value())
                 .msg(msg)
                 .build();
@@ -34,7 +34,7 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse ok(T data) {
         return ApiResponse.builder()
-                .isSuccess(true)
+                .success(true)
                 .code(HttpStatus.OK.value())
                 .msg(HttpStatus.OK.getReasonPhrase())
                 .data(data)
@@ -50,7 +50,7 @@ public class ApiResponse<T> {
 
     public static ApiResponse error(int code, String msg) {
         return ApiResponse.builder()
-                .isSuccess(false)
+                .success(false)
                 .code(code)
                 .msg(msg)
                 .build();
