@@ -5,7 +5,7 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:mysql://106.15.43.169:3307/cms?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://106.15.43.169:3307/aixue?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: yunbandan.1
 
