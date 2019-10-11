@@ -10,9 +10,9 @@ spring:
     password: yunbandan.1
 
   redis:
-    host: 106.15.43.169
-    port: 6380
-    password:
+    host: master.nitrogen-dpc-redis-sit.zjzejd.use1.cache.amazonaws.com
+    port: 6379
+    password: sZwPVkgpn53jc9yg
     timeout: 10000ms
 
 mybatis-plus:

@@ -1,10 +1,6 @@
 package online.lianxue.cms.config;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -16,12 +12,8 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-import java.time.Duration;
-
 
 @Configuration
 @EnableCaching
@@ -46,25 +38,18 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         // 配置redisTemplate
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory);
-        redisTemplate.setKeySerializer(new StringRedisSerializer()); // key序列化
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer()); // value序列化
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer()); // Hash key序列化
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer()); // Hash value序列化
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(fastJsonRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(fastJsonRedisSerializer());
         return redisTemplate;
     }
 
-    private Jackson2JsonRedisSerializer jackson2JsonRedisSerializer() {
+    private FastJsonRedisSerializer fastJsonRedisSerializer() {
         //设置序列化
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-        om.disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
-        om.registerModule(new JavaTimeModule());
-        jackson2JsonRedisSerializer.setObjectMapper(om);
-        return jackson2JsonRedisSerializer;
+        return new FastJsonRedisSerializer<>(Object.class);
     }
 
     /**
@@ -78,10 +63,9 @@ public class RedisConfig extends CachingConfigurerSupport {
         //初始化一个RedisCacheWriter
         RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);
         //设置CacheManager的值序列化方式为jackson2JsonRedisSerializer,但RedisCacheConfiguration默认使用StringRedisSerializer序列化key，JdkSerializationRedisSerializer序列化value
-        RedisSerializationContext.SerializationPair<Object> pair = RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer());
+        RedisSerializationContext.SerializationPair<Object> pair = RedisSerializationContext.SerializationPair.fromSerializer(fastJsonRedisSerializer());
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeValuesWith(pair)
-                .entryTtl(Duration.ofSeconds(120))//设置默认超过期时间是120秒
                 .disableCachingNullValues();
         //这种方式设置无效
         //defaultCacheConfig.entryTtl(Duration.ofSeconds(120));

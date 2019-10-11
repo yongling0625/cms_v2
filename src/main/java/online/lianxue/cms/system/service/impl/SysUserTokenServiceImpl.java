@@ -24,23 +24,21 @@ import java.time.LocalDateTime;
 public class SysUserTokenServiceImpl extends ServiceImpl<SysUserTokenMapper, SysUserToken> implements SysUserTokenService {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public SysUserToken createToken(SysUser sysUser) {
         // 生成一个token
-        String token = JWTUtil.generateToken(sysUser.getId(),sysUser.getName(),sysUser.getPassword());
+        String token = JWTUtil.generateToken(sysUser.getId(), sysUser.getName(), sysUser.getPassword());
         // 判断是否生成过token
         SysUserToken sysUserToken = (SysUserToken) redisTemplate.opsForValue().get("token" + sysUser.getId());
-        if(sysUserToken == null){
+        if (sysUserToken == null) {
             sysUserToken = new SysUserToken();
             sysUserToken.setUserId(sysUser.getId());
-            sysUserToken.setToken(token);
-            sysUserToken.setExpireTime(LocalDateTime.now().plusDays(1));
-        } else{
-            sysUserToken.setToken(token);
-            sysUserToken.setExpireTime(LocalDateTime.now().plusDays(1));
         }
+        sysUserToken.setToken(token);
+        sysUserToken.setExpireTime(LocalDateTime.now().plusDays(1));
+
         redisTemplate.opsForValue().set("token" + sysUser.getId(), sysUserToken);
         return sysUserToken;
     }
