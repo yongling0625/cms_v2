@@ -15,13 +15,12 @@ import java.util.Set;
 @Component
 public class RedisCacheManager implements CacheManager {
 
-    private String cacheKeyPrefix = "shiro:cache:";
-
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public <K, V> Cache<K, V> getCache(String name) throws CacheException {
+        String cacheKeyPrefix = "shiro:cache:";
         return new ShiroRedisCache<K, V>(cacheKeyPrefix + name);
     }
 

@@ -1,6 +1,6 @@
 package online.lianxue.cms.shiro;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSON;
 import online.lianxue.cms.common.response.ApiResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -47,8 +47,7 @@ public class JWTFilter extends AuthenticatingFilter {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setContentType("application/json; charset=utf-8");
             ApiResponse result = ApiResponse.error(HttpStatus.UNAUTHORIZED.value(), "invalid token");
-            String json = new ObjectMapper().writeValueAsString(result);
-			httpResponse.getWriter().print(json);
+			httpResponse.getWriter().print(JSON.toJSONString(result));
             return false;
         }
         return executeLogin(request, response);
@@ -62,8 +61,7 @@ public class JWTFilter extends AuthenticatingFilter {
             // 处理登录失败的异常
             Throwable throwable = e.getCause() == null ? e : e.getCause();
             ApiResponse result = ApiResponse.error(HttpStatus.UNAUTHORIZED.value(), throwable.getMessage());
-            String json = new ObjectMapper().writeValueAsString(result);
-            httpResponse.getWriter().print(json);
+            httpResponse.getWriter().print(JSON.toJSONString(result));
         } catch (IOException e1) {
         }
         return false;
