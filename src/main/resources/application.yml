@@ -1,11 +1,12 @@
-# MyBatis-Plus Config
-mybatis-plus:
-  type-aliases-package: online.lianxue.cms.*.entity
-
-
 server:
   port: 8080
 
 spring:
+  application:
+    name: cms
   profiles:
     active: dev
+
+# MyBatis-Plus Config
+mybatis-plus:
+  type-aliases-package: online.lianxue.cms.*.entity

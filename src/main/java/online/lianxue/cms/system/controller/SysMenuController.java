@@ -1,5 +1,6 @@
 package online.lianxue.cms.system.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import online.lianxue.cms.common.response.ApiResponse;
 import online.lianxue.cms.system.entity.SysMenu;
 import online.lianxue.cms.system.service.SysMenuService;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin
 @RequestMapping("menu")
+@Slf4j
 public class SysMenuController {
 
 	@Autowired
@@ -50,6 +52,7 @@ public class SysMenuController {
 //	@RequiresPermissions("sys:menu:view")
 	@GetMapping(value="/findMenuTree")
 	public ApiResponse findMenuTree() {
+		log.info("findMenuTree");
 		return ApiResponse.ok(sysMenuService.findTree(null, 0));
 	}
 }
