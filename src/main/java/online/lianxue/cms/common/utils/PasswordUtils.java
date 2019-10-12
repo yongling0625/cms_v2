@@ -1,4 +1,4 @@
-package online.lianxue.cms.common.util;
+package online.lianxue.cms.common.utils;
 
 import org.apache.shiro.crypto.hash.Sha256Hash;
 

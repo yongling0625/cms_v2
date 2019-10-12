@@ -3,7 +3,7 @@ package online.lianxue.cms.system.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import online.lianxue.cms.common.response.ApiResponse;
-import online.lianxue.cms.common.util.PasswordUtils;
+import online.lianxue.cms.common.utils.PasswordUtils;
 import online.lianxue.cms.system.entity.SysUser;
 import online.lianxue.cms.system.service.SysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

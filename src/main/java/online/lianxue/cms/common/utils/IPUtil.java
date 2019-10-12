@@ -1,4 +1,4 @@
-package online.lianxue.cms.common.util;
+package online.lianxue.cms.common.utils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;

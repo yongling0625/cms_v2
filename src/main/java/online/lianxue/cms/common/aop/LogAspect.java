@@ -1,7 +1,7 @@
 package online.lianxue.cms.common.aop;
 
 import lombok.extern.slf4j.Slf4j;
-import online.lianxue.cms.common.util.IPUtil;
+import online.lianxue.cms.common.utils.IPUtil;
 import online.lianxue.cms.system.entity.SysLog;
 import online.lianxue.cms.system.service.SysLogService;
 import org.aspectj.lang.ProceedingJoinPoint;
