@@ -2,7 +2,6 @@ package online.lianxue.cms.system.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import online.lianxue.cms.common.entity.CreateUpdateEntity;
 
 import java.time.LocalDateTime;
 
@@ -15,8 +14,8 @@ import java.time.LocalDateTime;
  * @since 2018-11-22
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class SysUserToken extends CreateUpdateEntity {
+@EqualsAndHashCode
+public class SysUserToken {
 
     private static final long serialVersionUID = 1L;
 

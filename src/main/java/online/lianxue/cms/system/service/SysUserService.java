@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import online.lianxue.cms.system.entity.SysUser;
 import online.lianxue.cms.system.entity.SysUserRole;
-import online.lianxue.cms.system.vo.SysUserVo;
+import online.lianxue.cms.system.dto.SysUserVo;
 
 import java.io.Serializable;
 import java.util.Collection;

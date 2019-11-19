@@ -1,4 +1,4 @@
-package online.lianxue.cms.system.vo;
+package online.lianxue.cms.system.dto;
 
 import lombok.Data;
 
@@ -6,9 +6,9 @@ import lombok.Data;
  * 登录接口封装对象
  */
 @Data
-public class LoginBean {
+public class LoginRequest {
 
-	private String account;
+	private String username;
 	private String password;
 	private String captcha;
 	

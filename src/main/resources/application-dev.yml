@@ -11,8 +11,10 @@ spring:
   redis:
     host: master.nitrogen-dpc-redis-sit.zjzejd.use1.cache.amazonaws.com
     port: 6379
-    password: sZwPVkgpn53jc9yg
     timeout: 10000ms
+    password: sZwPVkgpn53jc9yg
+    ssl: true
+    database: 3
 
 mybatis-plus:
   configuration:

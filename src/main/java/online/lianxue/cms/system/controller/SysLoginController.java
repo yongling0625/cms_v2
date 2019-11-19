@@ -4,13 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.code.kaptcha.Producer;
 import online.lianxue.cms.common.response.ApiResponse;
 import online.lianxue.cms.common.utils.PasswordUtils;
+import online.lianxue.cms.common.utils.RedisUtils;
 import online.lianxue.cms.system.entity.SysUser;
 import online.lianxue.cms.system.entity.SysUserToken;
 import online.lianxue.cms.system.service.SysUserService;
 import online.lianxue.cms.system.service.SysUserTokenService;
-import online.lianxue.cms.system.vo.LoginBean;
+import online.lianxue.cms.system.dto.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,9 +36,9 @@ public class SysLoginController {
 	@Autowired
 	private SysUserTokenService sysUserTokenService;
 	@Autowired
-	private RedisTemplate redisTemplate;
+	private RedisUtils redisUtils;
 
-	@GetMapping("captcha.jpg")
+	@GetMapping("/captcha.jpg")
 	public void captcha(HttpServletResponse response) throws IOException {
 		response.setHeader("Cache-Control", "no-store, no-cache");
 		response.setContentType("image/jpeg");
@@ -47,25 +48,25 @@ public class SysLoginController {
 		// 生成图片验证码
 		BufferedImage image = producer.createImage(text);
 //		// 保存到验证码到 redis
-		redisTemplate.opsForValue().set("kaptcha", text);
+		redisUtils.set("kaptcha", text);
 
 		ServletOutputStream out = response.getOutputStream();
 		ImageIO.write(image, "jpg", out);	
-//		IOUtils.closeQuietly(out);
 		out.close();
 	}
 
 	/**
 	 * 登录接口
 	 */
+	@CrossOrigin
 	@PostMapping(value = "/login")
-	public ApiResponse login(@RequestBody LoginBean loginBean){
-		String userName = loginBean.getAccount();
-		String password = loginBean.getPassword();
-		String captcha = loginBean.getCaptcha();
+	public ApiResponse login(@RequestBody LoginRequest loginRequest){
+		String username = loginRequest.getUsername();
+		String password = loginRequest.getPassword();
+		String captcha = loginRequest.getCaptcha();
 		
 		// 从session中获取之前保存的验证码跟前台传来的验证码进行匹配
-		Object kaptcha = redisTemplate.opsForValue().get("kaptcha");
+		Object kaptcha = redisUtils.get("kaptcha");
 //		if(kaptcha == null){
 //			return ApiResponse.error("验证码已失效");
 //		}
@@ -74,7 +75,7 @@ public class SysLoginController {
 //		}
 		
 		// 用户信息
-		SysUser user = sysUserService.getOne(new QueryWrapper<SysUser>().eq("name",userName));
+		SysUser user = sysUserService.getOne(new QueryWrapper<SysUser>().eq("name",username));
 
 		// 账号不存在、密码错误
 		if (user == null) {

@@ -35,7 +35,7 @@ public class ShiroConfig {
         Map<String, String> filterChainMap = new LinkedHashMap<String, String>();
         //开放登陆接口
         filterChainMap.put("/login", "anon");
-        filterChainMap.put("/menu/findMenuTree", "anon");
+//        filterChainMap.put("/menu/findMenuTree", "anon");
 //        filterChainMap.put("/druid", "anon");
         // 验证码
         filterChainMap.put("/captcha.jpg**", "anon");

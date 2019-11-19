@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  * 菜单控制器
  */
 @RestController
-@CrossOrigin
 @RequestMapping("menu")
 @Slf4j
 public class SysMenuController {
@@ -49,7 +48,7 @@ public class SysMenuController {
 		return ApiResponse.ok(sysMenuService.findTree(userId, 1));
 	}
 
-//	@RequiresPermissions("sys:menu:view")
+	@RequiresPermissions("sys:menu:view")
 	@GetMapping(value="/findMenuTree")
 	public ApiResponse findMenuTree() {
 		log.info("findMenuTree");

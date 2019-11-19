@@ -1,4 +1,4 @@
-package online.lianxue.cms.system.vo;
+package online.lianxue.cms.system.dto;
 
 import lombok.Data;
 import online.lianxue.cms.common.entity.CreateUpdateEntity;

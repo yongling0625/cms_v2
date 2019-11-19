@@ -3,7 +3,7 @@ package online.lianxue.cms.system.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import online.lianxue.cms.system.entity.SysUser;
-import online.lianxue.cms.system.vo.SysUserVo;
+import online.lianxue.cms.system.dto.SysUserVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 

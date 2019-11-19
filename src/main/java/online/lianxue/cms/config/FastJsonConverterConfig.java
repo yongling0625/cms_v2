@@ -17,7 +17,7 @@ import java.util.List;
  * @author zhuyl
  */
 @Configuration
-public class MessageConverterConfig {
+public class FastJsonConverterConfig {
 
     @Bean
     public HttpMessageConverters fastJsonMessageConverters() {

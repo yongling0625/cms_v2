@@ -14,7 +14,7 @@ import online.lianxue.cms.system.mapper.SysRoleMenuMapper;
 import online.lianxue.cms.system.mapper.SysUserMapper;
 import online.lianxue.cms.system.mapper.SysUserRoleMapper;
 import online.lianxue.cms.system.service.SysUserService;
-import online.lianxue.cms.system.vo.SysUserVo;
+import online.lianxue.cms.system.dto.SysUserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
